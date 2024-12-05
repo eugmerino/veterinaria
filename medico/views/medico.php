@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestión de Médicos</title>
-    <!-- Include Bootstrap CSS from CDN -->
+   
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEJx3y6XwA4pU5P6f9b8p9yU25x4jDmrDIC8Ff9jV2l4nYFJr9TZCQm56u4Wb" crossorigin="anonymous">
 </head>
 <body>
@@ -70,14 +70,12 @@
                             <tbody>
                                 <!-- PHP to dynamically generate doctor list -->
                                 <?php
-                                require_once __DIR__ . '/Medico.php';
-                                $medico = new Medico($conn);
-                                $medicos = $medico->obtenerMedico();
+                                
                                 foreach ($medicos as $m) {
                                     echo "<tr>
                                             <td>{$m['codigo']}</td>
                                             <td>{$m['nombre']}</td>
-                                            <td>{$m['apellido']}</td>
+                                            <td>{$m['apellidos']}</td>
                                             <td>{$m['telefono']}</td>
                                             <td>
                                                 <a href='editar.php?codigo={$m['codigo']}' class='btn btn-warning btn-sm'>Editar</a>

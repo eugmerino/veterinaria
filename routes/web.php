@@ -3,11 +3,13 @@ require_once __DIR__ . '/../config/conexion.php';
 require_once __DIR__ . '/../home/controllers/homeController.php';
 require_once __DIR__ . '/../consulta/controllers/pacienteController.php';
 require_once __DIR__ . '/../login/controllers/loginController.php';
+require_once __DIR__ . '/../medico/controller/medicoController.php';
 
 // Instanciar controladores
 $homeController = new HomeController();
 $pacienteController = new PacienteController($conn);
 $loginController = new LoginController($conn);
+$medicoController= new MedicoController($conn);
 
 // Obtener la ruta solicitada
 $requestUri = filter_var(
@@ -23,6 +25,7 @@ $routes = [
     '/consultas' => fn() => $pacienteController->listarPacientes(),
     '/buscar-paciente' => fn() => $pacienteController->buscarPaciente(),
     '/registrar-paciente' => fn() => $pacienteController->registrarPaciente(),
+    '/mostrar-medico' => fn() => $medicoController->mostrarMedico(),
 ]; 
 
 // Ejecutar la ruta correspondiente

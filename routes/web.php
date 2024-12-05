@@ -1,45 +1,30 @@
 <?php
 require_once __DIR__ . '/../config/conexion.php';
 require_once __DIR__ . '/../home/controllers/homeController.php';
-require_once __DIR__ . '/../consulta/controllers/consultaController.php';
-require_once __DIR__ . '/../login/controllers/loginController.php';
-try {
-    $conn = getConnection(); // Obtén la conexión
-    //echo "Conexión exitosa"; // Debugging
-} catch (Exception $e) {
-    echo "Error al conectar a la base de datos: " . $e->getMessage();
-    exit();
-}
+require_once __DIR__ . '/../consulta/controllers/pacienteController.php';
 
 // Instanciar controladores
 $homeController = new HomeController();
-$consultaController = new ConsultaController($conn);
-$loginController = new LoginController($conn);
+$pacienteController = new PacienteController($conn);
 
 // Obtener la ruta solicitada
-$requestUri = str_replace('/veterinaria', '', $_SERVER['REQUEST_URI']);
-echo("$requestUri");
-// Rutas
-if ($requestUri === '/' || $requestUri === '') {
-    // Ruta principal (Login)
-     $loginController->index();
-    //$homeController->index();
-} elseif($requestUri === '/login/validar' && $_SERVER['REQUEST_METHOD'] === 'POST') {
-    //Validar Usuario
-    $loginController->validarUsuario($_POST['username'], $_POST['password']);
-} elseif ($requestUri === '/consulta/validarPaciente' && $_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Validar paciente (AJAX)
-    $consultaController->validarPaciente($_POST['codigo']);
-} elseif ($requestUri === '/consulta/agregarPaciente' && $_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Agregar paciente (AJAX)
-    $consultaController->agregarPaciente($_POST);
-} elseif ($requestUri === '/consultas') {
-    // Vista de consulta de pacientes
-    require_once __DIR__ . '/../consulta/views/consulta.php';
-}elseif ($requestUri === '/inicio') {
-    // Vista de consulta de pacientes
-    require_once __DIR__ . '/../home/views/home.php';
+$requestUri = filter_var(
+    str_replace('/veterinaria', '', $_SERVER['REQUEST_URI']),
+    FILTER_SANITIZE_URL
+);
+
+// Definir las rutas
+$routes = [
+    '/' => fn() => $loginController->index(),
+    '/login/validar' fn() => $loginController->validarUsuario($_POST['username'], $_POST['password']),
+    '/consultas' => fn() => $pacienteController->listarPacientes(),
+    '/buscar-paciente' => fn() => $pacienteController->buscarPaciente(),
+    '/registrar-paciente' => fn() => $pacienteController->registrarPaciente(),
+]; 
+
+// Ejecutar la ruta correspondiente
+if (array_key_exists($requestUri, $routes)) {
+    $routes[$requestUri]();
 } else {
-    // Ruta no encontrada
     echo "404 - Página no encontrada.";
 }

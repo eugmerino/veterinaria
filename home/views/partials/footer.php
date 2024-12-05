@@ -1,6 +1,4 @@
 </main>
-    <footer>
-        <p>&copy; <?= date('Y'); ?> Veterinaria. Todos los derechos reservados.</p>
-    </footer>
+    <script src="../veterinaria/public/js/script.js"></script>
 </body>
 </html>

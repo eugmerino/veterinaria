@@ -1,18 +1,17 @@
 <?php
-function getConnection() {
-    $servername = "localhost";
-    $username = "root";
-    $password = "";
-    $dbname = "veterinaria";
+// conexion.php
 
-    // Crear conexión
-    $conn = new mysqli($servername, $username, $password, $dbname);
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "veterinaria";
 
-    // Verificar conexión
-    if ($conn->connect_error) {
-        throw new Exception("Conexión fallida: " . $conn->connect_error);
-    }
+// Crear conexión
+$conn = new mysqli($servername, $username, $password, $dbname);
 
-    return $conn;
+// Verificar conexión
+if ($conn->connect_error) {
+    die("Conexión fallida: " . $conn->connect_error);
 }
-?>
+
+return $conn;  // Esto debe retornar la conexión para que web.php la reciba

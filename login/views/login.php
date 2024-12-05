@@ -9,7 +9,7 @@
 <body>
   <div class="login-container">
     <h1>Inicia Sesión</h1>
-    <form action="#" method="POST">
+    <form action="/veterinaria/login/validar" method="POST">
       <input type="text" name="username" placeholder="Usuario" required>
       <input type="password" name="password" placeholder="Contraseña" required>
       <button type="submit">Entrar</button>

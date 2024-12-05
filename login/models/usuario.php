@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../../../config/conexion.php';
+require_once __DIR__ . '/../../config/conexion.php';
 
 
 class Usuario {
@@ -30,6 +30,15 @@ class Usuario {
         $sql = "SELECT * FROM Usuario WHERE codigo = ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("s", $codigo);
+        $stmt->execute();
+        return $stmt->get_result()->fetch_assoc();
+    }
+
+    // Validar usuario
+    public function obtenerUsuarioPorCodigoYContra($codigo,$contrasenia) {
+        $sql = "SELECT * FROM Usuario WHERE  codigo = ? AND contrasenia = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("ss", $codigo, $contrasenia);
         $stmt->execute();
         return $stmt->get_result()->fetch_assoc();
     }

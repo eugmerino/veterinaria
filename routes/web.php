@@ -18,7 +18,7 @@ $requestUri = filter_var(
 // Definir las rutas
 $routes = [
     '/' => fn() => $loginController->index(),
-    '/login/validar' => fn() => $loginController->validarUsuario($_POST['username'], $_POST['password']),
+    '/login/validar' => fn() => $loginController->validarUsuario(),
     '/inicio' => fn() => $homeController->home(),
     '/consultas' => fn() => $pacienteController->listarPacientes(),
     '/buscar-paciente' => fn() => $pacienteController->buscarPaciente(),

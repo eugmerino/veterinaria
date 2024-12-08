@@ -12,15 +12,50 @@ class LoginController {
         require_once __DIR__ . '/../views/login.php';
     }
 
-    public function validarUsuario($nombre,$contrasenia){
-        $usuario = $this->usuarioModel->obtenerUsuarioPorCodigoYContra($nombre,$contrasenia);
-        if($usuario){
-            //echo json_encode(['status'=>'sucess', 'data' => $usuario]);
-            header("Location: /veterinaria/inicio");
-            exit();
-        }else{
-            echo json_encode(['status' => 'failed', 'data' => 'not_found']);
+    public function validarUsuario(){
+        header('Content-Type: application/json');  // Define el encabezado JSON una vez al principio
+
+        // Obtener los datos recibidos
+        $input = file_get_contents('php://input');
+        $usuario = json_decode($input, true);
+
+        // Verificar si los datos requeridos fueron recibidos
+        if (isset($usuario['username']) && isset($usuario['password'])) {
+            $nombre = $usuario["username"];
+            $contrasenia = $usuario["password"];
+
+            // Suponiendo que tienes un modelo para obtener al usuario desde la base de datos
+            $usuario = $this->usuarioModel->obtenerUsuarioPorCodigoYContra($nombre, $contrasenia);
+            
+            if ($usuario) {
+                // Usuario encontrado
+                $json = json_encode([
+                    'status' => 'sucess',
+                    'user' => $nombre,
+                    'codigo'=>$nombre,
+                ]);
+            } else {
+                // Usuario no encontrado
+                $json = json_encode([
+                    'status' => 'failed',
+                    'message' => 'Usuario no encontrado',
+                    'user' => null,
+                    'pass' => null
+                ]);
+            }
+        } else {
+            // Datos no recibidos correctamente
+            $json = json_encode([
+                'status' => 'failed',
+                'message' => 'Datos incorrectos o incompletos',
+                'user' => null,
+                'pass' => null
+            ]);
         }
+        // Enviar la respuesta JSON
+        echo $json;
+        exit();  // Finalizamos la ejecución después de enviar la respuesta JSON
+
     }
 }
 ?>

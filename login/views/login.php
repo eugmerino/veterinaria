@@ -9,11 +9,12 @@
 <body>
   <div class="login-container">
     <h1>Inicia Sesión</h1>
-    <form action="/veterinaria/login/validar" method="POST">
-      <input type="text" name="username" placeholder="Usuario" required>
-      <input type="password" name="password" placeholder="Contraseña" required>
+    <form action="" method="POST" id="loginForm">
+      <input type="text" id="username" name="username" placeholder="Usuario" required>
+      <input type="password" id="password" name="password" placeholder="Contraseña" required>
       <button type="submit">Entrar</button>
     </form>
   </div>
 </body>
+<script src="/veterinaria/login/js/login.js"></script>
 </html>

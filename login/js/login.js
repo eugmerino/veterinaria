@@ -29,15 +29,8 @@ function enviar(){
 
 function login(json) {
     if (json.status === 'sucess') {
-        // Simulamos la creación de un JWT (esto sería hecho por un servidor real)
-        const payload = {
-            userId: json.codigo,
-            username: json.username,
-            exp: Date.now() + 3600 * 1000  // Expiración en 1 hora
-        };
 
-        const token = btoa(JSON.stringify(payload));  // Codificar como Base64
-        localStorage.setItem('jwt_token', token);     // Guardar en localStorage
+        localStorage.setItem('jwt_token', json.jwt);     // Guardar en localStorage
         console.log("Login exitoso, token guardado.");
         window.location.href = '/veterinaria/inicio';  // Redirigir a una página protegida
     } else {

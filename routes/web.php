@@ -19,6 +19,7 @@ $requestUri = filter_var(
 $routes = [
     '/' => fn() => $loginController->index(),
     '/login/validar' => fn() => $loginController->validarUsuario(),
+    '/validarToken' => fn() => $loginController->validarToken(),
     '/inicio' => fn() => $homeController->home(),
     '/consultas' => fn() => $pacienteController->listarPacientes(),
     '/buscar-paciente' => fn() => $pacienteController->buscarPaciente(),

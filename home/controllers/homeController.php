@@ -3,6 +3,6 @@
 class HomeController {
     public function home() {
         $title = "Inicio";
-        require_once __DIR__ . '/../views/home.php';
+        require __DIR__ . '/../views/home.php';
     }
 }

@@ -42,4 +42,38 @@ class PacienteController {
         }
     }
 
+    public function pacientesView() {
+        $pacientesList = $this->pacienteModel->obtenerPacientes();
+        require_once __DIR__ . '/../views/pacientesView.php';
+    }
+
+    // Actualizar un paciente
+    public function actualizarPaciente() {
+        $codigo = $_POST['codigo'];
+        $nombrePropietario = $_POST['nombrePropiertarioP'];
+        $correo = $_POST['correoP'];
+        $telefono = $_POST['telefonoP'];
+        $nombrePaciente = $_POST['nombreP'];
+        $fechaNacimiento = $_POST['fechaNacP'];
+
+        $resultado = $this->pacienteModel->actualizarPaciente($codigo, $nombrePropietario, $correo, $telefono, $nombrePaciente, $fechaNacimiento);
+        if ($resultado) {
+            echo json_encode(['success' => true, 'message' => 'Paciente actualizado exitosamente']);
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Error al actualizar paciente']);
+        }
+    }
+
+    // Eliminar un paciente
+    public function eliminarPaciente() {
+        $codigo = $_POST['codigo'];
+
+        $resultado = $this->pacienteModel->eliminarPaciente($codigo);
+        if ($resultado) {
+            echo json_encode(['success' => true, 'message' => 'Paciente eliminado exitosamente']);
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Error al eliminar paciente']);
+        }
+    }
+
 }

@@ -7,37 +7,41 @@ class Medico {
     }
      
     // Obtener todos los Medicos
-    public function obtenerMedico() {
+    public function obtenerMedicos() {
         $sql = "SELECT * FROM medico";
         $result = $this->conn->query($sql);
         return $result->fetch_all(MYSQLI_ASSOC);
     }
 
     // Agregar un nuevo Medico
-    public function agregarMedico($codigo, $nombre, $apellido, $telefono) {
-        $sql = "INSERT INTO Consulta (codigo, nombre, apellido, telefono)
+    public function agregarMedico($codigo, $nombre, $apellidos, $telefono) {
+        $sql = "INSERT INTO Medico (codigo, nombre, apellidos, telefono)
                 VALUES (?, ?, ?, ?)";
         $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("sssssi", $codigo,$nombre, $apellido, $telefono);
+        $stmt->bind_param("ssss", $codigo,$nombre, $apellidos, $telefono);
         return $stmt->execute();
     }
 
     // Obtener un medico por su código
     public function obtenerMedicoPorCodigo($codigo) {
-        $sql = "SELECT * FROM medico WHERE codigo = ?";
+        $sql = "SELECT * FROM Medico WHERE codigo = ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("s", $codigo);
         $stmt->execute();
         return $stmt->get_result()->fetch_assoc();
     }
 
-    // Actualizar una consulta
-    public function actualizarMedico( $nombre, $apellido, $telefono ) {
-        $sql = "UPDATE medico 
-                SET  nombre = ?, apellido = ?, telefono = ?
+    // Actualizar datos de un medico
+    public function actualizarMedico($codigo, $nombre, $apellidos, $telefono) {
+        $sql = "UPDATE Medico 
+                SET nombre = ?, apellidos = ?, telefono = ?
                 WHERE codigo = ?";
         $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("ssssis",  $nombre, $apellido, $telefono);
+        if (!$stmt) {
+            error_log("Error al preparar la consulta: " . $this->conn->error);
+            return false;
+        }
+        $stmt->bind_param("ssss", $nombre, $apellidos, $telefono, $codigo);
         return $stmt->execute();
     }
 

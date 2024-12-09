@@ -357,4 +357,217 @@ document.addEventListener("DOMContentLoaded", () => {
             updateDeleteModal.style.display = "none";
         });
     }
+
+    /* Script para pacientesView */
+    if (window.location.pathname === '/veterinaria/pacientes') {
+        const registroModal = document.getElementById("registroModal");
+        const updateDeletePacienteModal = document.getElementById("updateDeletePacienteModal");
+        const cerrarModalBtn = document.getElementById("cerrarModalBtn");
+        const cerrarModalUDBtn = document.getElementById("cerrarModalUDBtn");
+        const buscarPacienteBtn = document.getElementById("buscarPacienteBtn");
+        const deleteBtn = document.getElementById("deleteBtn");
+        const updateDeletePacienteForm = document.getElementById("updateDeletePacienteForm");
+
+        // Abrir modal de registro
+        abrirRegistroModalBtn.addEventListener("click", () => {
+            registroModal.style.display = "block";
+        });
+
+        // Cerrar modal
+        cerrarModalBtn.addEventListener("click", () => {
+            registroModal.style.display = "none";
+        });
+        cerrarModalUDBtn.addEventListener("click", () => {
+            updateDeletePacienteModal.style.display = "none";
+        });
+
+        // Registrar paciente
+        const registroForm = document.getElementById("registroPacienteForm");
+        registroForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+            const formData = new FormData(registroForm);
+            fetch('veterinaria/registrar-paciente', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                if (data.success) {
+                    location.reload(true);
+                }
+            });
+        });
+
+        //buscar paciente
+        buscarPacienteBtn.addEventListener("click", () => {
+            const codigo = document.getElementById("codigoPacienteBuscar").value;
+            fetch('veterinaria/buscar-paciente', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ codigo })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('codigoP').value = data.paciente.codigo;
+                    document.getElementById('nombrePropiertarioP').value = data.paciente.nombre_propietario;
+                    document.getElementById('correoP').value = data.paciente.correo;
+                    document.getElementById('telefonoP').value = data.paciente.telefono;
+                    document.getElementById('nombreP').value = data.paciente.nombre_paciente;
+                    document.getElementById('fechaNacP').value = data.paciente.fecha_nacimiento;
+                    
+                    updateDeletePacienteModal.style.display = "block";
+                } else {
+                    alert("Paciente no encontrado.");
+                }
+            });
+        });
+
+        //actualizar paciente
+        updateDeletePacienteForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+            const formData = new FormData(updateDeletePacienteForm);
+            formData.append('codigo', document.getElementById('codigoP').value);
+            fetch('veterinaria/actualizar-paciente', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(data.message);
+                    location.reload(true);
+                } else {
+                    alert("Error al actulizar consulta");
+                }
+            });
+        });
+        //eliminar paciente
+        deleteBtn.addEventListener("click", () => {
+            const formData = new FormData(updateDeletePacienteForm);
+            formData.append('codigo', document.getElementById('codigoP').value);
+            fetch('veterinaria/eliminar-paciente', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(data.message);
+                    location.reload(true);
+                } else {
+                    alert("Error al eliminar paciente");
+                }
+            });
+        });
+
+    }
+
+    /* Script para medicosView */
+    if (window.location.pathname === '/veterinaria/medicos') {
+        const registroModal = document.getElementById("registroModal");
+        const updateDeleteMedicoModal = document.getElementById("updateDeleteMedicoModal");
+        const cerrarModalBtn = document.getElementById("cerrarModalBtn");
+        const cerrarModalUDBtn = document.getElementById("cerrarModalUDBtn");
+        const buscarMedicoBtn = document.getElementById("buscarMedicoBtn");
+        const deleteBtn = document.getElementById("deleteBtn");
+        const updateDeleteMedicoForm = document.getElementById("updateDeleteMedicoForm");
+
+        // Abrir modal de registro
+        abrirRegistroModalBtn.addEventListener("click", () => {
+            registroModal.style.display = "block";
+        });
+
+        // Cerrar modal
+        cerrarModalBtn.addEventListener("click", () => {
+            registroModal.style.display = "none";
+        });
+        cerrarModalUDBtn.addEventListener("click", () => {
+            updateDeleteMedicoModal.style.display = "none";
+        });
+
+        // Registrar medico
+        const registroForm = document.getElementById("registroMedicoForm");
+        registroForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+            const formData = new FormData(registroForm);
+            fetch('veterinaria/registrar-medico', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                if (data.success) {
+                    location.reload(true);
+                }
+            });
+        });
+
+        //buscar medico
+        buscarMedicoBtn.addEventListener("click", () => {
+            const codigo = document.getElementById("codigoMedicoBuscar").value;
+            fetch('veterinaria/buscar-medico', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ codigo })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('codigoM').value = data.medico.codigo;
+                    document.getElementById('nombreM').value = data.medico.nombre;
+                    document.getElementById('apellidosM').value = data.medico.apellidos;
+                    document.getElementById('telefonoM').value = data.medico.telefono;
+                    
+                    updateDeleteMedicoModal.style.display = "block";
+                } else {
+                    alert("Medico no encontrado.");
+                }
+            });
+        });
+
+        //actualizar medico
+        updateDeleteMedicoForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+            const formData = new FormData(updateDeleteMedicoForm);
+            formData.append('codigo', document.getElementById('codigoM').value);
+            fetch('veterinaria/actualizar-medico', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(data.message);
+                    location.reload(true);
+                } else {
+                    alert("Error al actulizar consulta");
+                }
+            });
+        });
+
+        //eliminar medico
+        deleteBtn.addEventListener("click", () => {
+            const formData = new FormData(updateDeleteMedicoForm);
+            formData.append('codigo', document.getElementById('codigoM').value);
+            fetch('veterinaria/eliminar-medico', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(data.message);
+                    location.reload(true);
+                } else {
+                    alert("Error al eliminar medico");
+                }
+            });
+        });
+
+    }
+
+
 });

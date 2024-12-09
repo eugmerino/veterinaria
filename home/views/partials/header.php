@@ -17,10 +17,10 @@
         <nav>
             <ul>
             <li><a href="<?php echo BASE_URL; ?>/inicio">Inicio</a></li>
-                <li><a href="<?php echo BASE_URL; ?>/consulta/paciente">Pacientes</a></li>
+                <li><a href="<?php echo BASE_URL; ?>/pacientes">Pacientes</a></li>
                 <li><a href="<?php echo BASE_URL; ?>/consultas">Consultas</a></li>
                 <li><a href="/expedientes">Expedientes</a></li>
-                <li><a href="/medicos">Medicos</a></li>
+                <li><a href="<?php echo BASE_URL; ?>/medicos">Medicos</a></li>
             </ul>
         </nav>
     </header>

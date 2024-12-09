@@ -60,7 +60,7 @@ class ExpedienteController {
         }
     }
 
-    // Actualizar un expediente
+    // Eliminar un expediente
     public function eliminarExpediente() {
         $numero = $_POST['numero'];
 

@@ -5,6 +5,7 @@ require_once __DIR__ . '/../consulta/controllers/pacienteController.php';
 require_once __DIR__ . '/../login/controllers/loginController.php';
 require_once __DIR__ . '/../consulta/controllers/consultaController.php';
 require_once __DIR__ . '/../consulta/controllers/expedienteController.php';
+require_once __DIR__ . '/../medico/controllers/medicoController.php';
 
 // Instanciar controladores
 $homeController = new HomeController();
@@ -12,6 +13,7 @@ $pacienteController = new PacienteController($conn);
 $loginController = new LoginController($conn);
 $consultaController = new ConsultaController($conn);
 $expedienteController = new ExpedienteController($conn);
+$medicoController = new MedicoController($conn);
 
 // Obtener la ruta solicitada
 $requestUri = filter_var(
@@ -37,6 +39,14 @@ $routes = [
     '/registrar-consulta-nueva' => fn() => $consultaController->registrarConsulta(),
     '/actualizar-consulta' => fn() => $consultaController->actualizarConsulta(),
     '/eliminar-consulta' => fn() => $consultaController->eliminarConsulta(),
+    '/pacientes' => fn() => $pacienteController->pacientesView(),
+    '/actualizar-paciente' => fn() => $pacienteController->actualizarPaciente(),
+    '/eliminar-paciente' => fn() => $pacienteController->eliminarPaciente(),
+    '/medicos' => fn() => $medicoController->listarMedicos(),
+    '/registrar-medico' => fn() => $medicoController->registrarMedico(),
+    '/buscar-medico' => fn() => $medicoController->buscarMedico(),
+    '/actualizar-medico' => fn() => $medicoController->actualizarMedico(),
+    '/eliminar-medico' => fn() => $medicoController->eliminarMedico(),
 ]; 
 
 // Ejecutar la ruta correspondiente

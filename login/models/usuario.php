@@ -18,11 +18,18 @@ class Usuario {
 
     // Agregar una nueva consulta
     public function addUsuario($codigo, $nombre, $contrasenia) {
-        $sql = "INSERT INTO Usuario (codigo, nombre, contrasenia)
+        try{
+            $sql = "INSERT INTO Usuario (codigo, nombre, contrasenia)
                 VALUES (?, ?, ?)";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("sss", $codigo, $nombre, $contrasenia);
-        return $stmt->execute();
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param("sss", $codigo, $nombre, $contrasenia);
+            $stmt->execute(); 
+            return $stmt; 
+        }catch (Exception $e) {
+            // Verificar si el error es por restricción UNIQUE
+            return null;
+        }
+                  
     }
 
     // Obtener un Usuario por su código
@@ -32,6 +39,15 @@ class Usuario {
         $stmt->bind_param("s", $codigo);
         $stmt->execute();
         return $stmt->get_result()->fetch_assoc();
+    }
+
+    // Obtener un Usuario por su código
+    public function obtenerUsuarioPorUser($username) {
+            $sql = "SELECT * FROM Usuario WHERE nombre = ?";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param("s", $username);
+            $stmt->execute();
+            return $stmt->get_result()->fetch_assoc();    
     }
 
     // Validar usuario
@@ -45,12 +61,16 @@ class Usuario {
 
     // Actualizar un Usuario
     public function actualizarUsuario($codigo, $nombre, $contrasenia) {
-        $sql = "UPDATE Usuario 
-                SET nombre = ?, contrasenia = ?
-                WHERE codigo = ?";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("sss", $nombre, $contrasenia, $codigo);
-        return $stmt->execute();
+        try{
+            $sql = "UPDATE Usuario 
+                    SET nombre = ?, contrasenia = ?
+                    WHERE codigo = ?";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param("sss", $nombre, $contrasenia, $codigo);
+            return $stmt->execute();
+        }catch (Exception $e) {
+            return null;
+        }
     }
 
     // Eliminar un Usuario

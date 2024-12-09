@@ -1,8 +1,11 @@
 <?php
 require_once __DIR__ . '/../../config/conexion.php';
 require_once __DIR__ . '/../models/usuario.php';
+require_once __DIR__ . '/../validacion.php';
+require_once __DIR__ . '/../utils/encript.php';
 class LoginController {
     private $usuarioModel;
+    //private $clave="ññññ41jffjjf";//esto debe de ir en una .env
 
     public function __construct($conn) {
         $this ->usuarioModel= new Usuario($conn);
@@ -12,15 +15,95 @@ class LoginController {
         require_once __DIR__ . '/../views/login.php';
     }
 
-    public function validarUsuario($nombre,$contrasenia){
-        $usuario = $this->usuarioModel->obtenerUsuarioPorCodigoYContra($nombre,$contrasenia);
-        if($usuario){
-            //echo json_encode(['status'=>'sucess', 'data' => $usuario]);
-            header("Location: /veterinaria/inicio");
-            exit();
-        }else{
-            echo json_encode(['status' => 'failed', 'data' => 'not_found']);
+    public function validarUsuario(){
+        header('Content-Type: application/json');  // Define el encabezado JSON una vez al principio
+
+        // Obtener los datos recibidos
+        $input = file_get_contents('php://input');
+        $usuario = json_decode($input, true);
+        $clave="ññññ41jffjjf";//esto debe de ir en una .env
+        // Verificar si los datos requeridos fueron recibidos
+        if (isset($usuario['username']) && isset($usuario['password'])) {
+            $nombre = $usuario["username"];
+            $contrasenia = $usuario["password"];
+
+            $encript = new Crypto("miClaveSuperSeguraDe32Caracteres");//lo mismo debe de ir en env.        
+            $usuario = $this->usuarioModel->obtenerUsuarioPorUser($nombre);
+            $codigo = $usuario['codigo'];
+            $contraseniaDb=$encript->decrypt($usuario['contrasenia']); 
+            $payload = [
+                "usuario" => $nombre,
+                "codigo" => $codigo,//aqui debe de ir el codigo en teoria xd
+                "iat" => time(), // Fecha de emisión
+                "exp" => time() + 3600 // Expira en 1 hora
+            ];
+            
+            if ($usuario) {
+                if($contrasenia==$contraseniaDb){
+                    // Usuario encontrado
+                    $jwt = crearToken($payload, $clave);//aqui debe de ir codigo y nombre que es el username                
+                    $json = json_encode([
+                        'status' => 'sucess',
+                        'message' => 'Usuario encontrado',
+                        'jwt' => $jwt
+                    ]);
+                }else {
+                    // Usuario no encontrado
+                    $json = json_encode([
+                        'status' => 'failed',
+                        'message' => 'Usuario no encontrado',
+                        'jwt' => null
+                    ]);
+                }
+                
+            } else {
+                // Usuario no encontrado
+                $json = json_encode([
+                    'status' => 'failed',
+                    'message' => 'Usuario no encontrado',
+                    'jwt' => null
+                ]);
+            }
+        } else {
+            // Datos no recibidos correctamente
+            $json = json_encode([
+                'status' => 'failed',
+                'message' => 'Datos incorrectos o incompletos',
+                'jwt' => null
+            ]);
         }
+        // Enviar la respuesta JSON
+        echo $json;
+        exit();  // Finalizamos la ejecución después de enviar la respuesta JSON
+
+    }
+
+    function validarToken(){
+        header('Content-Type: application/json');  // Define el encabezado JSON una vez al principio
+
+        // Capturar el token desde los parámetros de consulta
+        $input = file_get_contents('php://input');
+        $jwt = json_decode($input, true);
+
+        // Obtener los datos recibidos
+        $clave="ññññ41jffjjf";//esto debe de ir en una .env
+        if (isset($jwt['jwt'])){
+            $resultado=verificarToken($jwt['jwt'],$clave);
+            if($resultado){
+                $json = json_encode([
+                    'status' => 'sucess'
+                ]);
+            }else{
+                $json = json_encode([
+                    'status' => 'failed'
+                ]);
+            }
+        }else{
+            $json = json_encode([
+                'status' => 'failed'
+            ]);
+        }
+        echo $json;
     }
 }
 ?>

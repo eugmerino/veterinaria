@@ -15,14 +15,16 @@
 <body>
     <header>
         <nav>
-            <ul>
-                <li><a href="/">Inicio</a></li>
-                <li><a href="<?php echo BASE_URL; ?>/consulta/paciente">Pacientes</a></li>
-                <li><a href="<?php echo BASE_URL; ?>/consultas">Consultas</a></li>
-                <li><a href="/expedientes">Expedientes</a></li>
-                <li><a href="/medicos">Medicos</a></li>
-                <li><a href="<?php echo BASE_URL; ?>/usuarios">Usuarios</a></li>
-                <li><button id="logoutButton">Cerrar Sesión</button></li>
+            <ul class="nav-menu">
+                    <li><a href="/">Inicio</a></li>
+                    <li><a href="<?php echo BASE_URL; ?>/consulta/paciente">Pacientes</a></li>
+                    <li><a href="<?php echo BASE_URL; ?>/consultas">Consultas</a></li>
+                    <li><a href="/expedientes">Expedientes</a></li>
+                    <li><a href="/medicos">Medicos</a></li>
+                    <li><a href="<?php echo BASE_URL; ?>/usuarios">Usuarios</a></li>
+            </ul>
+            <ul class="nav-right">
+                    <li><a href="#">Cerrar Sesión</a></li>
             </ul>
         </nav>
     </header>

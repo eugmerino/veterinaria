@@ -15,6 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
     cerrarModalBtn.addEventListener("click", () => {
         registroModal.style.display = "none";
         registroForm.reset();
+        codigo.disabled=false;
     });
 
     // Registrar paciente
@@ -22,7 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
     registroForm.addEventListener("submit", (e) => {
         e.preventDefault();
         const formData = new FormData(registroForm);
-        if(op =="ingresar"){
+        if(op.value =='ingresar'){
             fetch('/veterinaria/usuario/registrar', {
                 method: 'POST',
                 body: formData
@@ -35,7 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     registroForm.reset();
                     window.location.href = '/veterinaria/usuarios';
                 }else{
-                    alert("No se pudo registrar");
+                    alert("No se pudo registrar codigo o user repetidos");
                 }
             });
         }else{
@@ -46,12 +47,13 @@ document.addEventListener("DOMContentLoaded", () => {
             .then(response => response.json())
             .then(data => {
                 if (data.status=='succes') {
-                    alert("Registro exitoso");
+                    alert("Edición exitosa");
                     registroModal.style.display = "none";
                     registroForm.reset();
+                    codigo.disabled=false;
                     window.location.href = '/veterinaria/usuarios';
                 }else{
-                    alert("No se pudo registrar");
+                    alert("No se pudo editar codigo o user repetidos");
                 }
             });
         }
@@ -89,6 +91,7 @@ function obtenerUsuario(id){
             registroModal.style.display = "block";
             username.value=responseData.nombre;
             codigo.value =responseData.codigo;
+            codigo.disabled=true;
             password.value = responseData.password;
             op.value = "editar";
         }else{

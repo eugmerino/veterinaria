@@ -28,11 +28,12 @@ class LoginController {
             $contrasenia = $usuario["password"];
 
             $encript = new Crypto("miClaveSuperSeguraDe32Caracteres");//lo mismo debe de ir en env.        
-            $usuario = $this->usuarioModel->obtenerUsuarioPorCodigo($nombre);
+            $usuario = $this->usuarioModel->obtenerUsuarioPorUser($nombre);
+            $codigo = $usuario['codigo'];
             $contraseniaDb=$encript->decrypt($usuario['contrasenia']); 
             $payload = [
                 "usuario" => $nombre,
-                "codigo" => $nombre,//aqui debe de ir el codigo en teoria xd
+                "codigo" => $codigo,//aqui debe de ir el codigo en teoria xd
                 "iat" => time(), // Fecha de emisión
                 "exp" => time() + 3600 // Expira en 1 hora
             ];
@@ -45,6 +46,13 @@ class LoginController {
                         'status' => 'sucess',
                         'message' => 'Usuario encontrado',
                         'jwt' => $jwt
+                    ]);
+                }else {
+                    // Usuario no encontrado
+                    $json = json_encode([
+                        'status' => 'failed',
+                        'message' => 'Usuario no encontrado',
+                        'jwt' => null
                     ]);
                 }
                 

@@ -1,6 +1,4 @@
 <?php
-require_once __DIR__ . '/../../config/conexion.php';
-
 class Paciente {
     private $conn;
 
@@ -71,3 +69,4 @@ class Paciente {
         return $stmt->execute();
     }
 }
+?>

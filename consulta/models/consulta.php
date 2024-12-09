@@ -1,7 +1,4 @@
 <?php
-require_once __DIR__ . '/../../../config/conexion.php';
-
-
 class Consulta {
     private $conn;
 
@@ -14,6 +11,58 @@ class Consulta {
         $sql = "SELECT * FROM Consulta";
         $result = $this->conn->query($sql);
         return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
+    // Obtener todas las consultas, incluyendo información del paciente y medico 
+    public function obtenerConsultasPacientesMedicos() {
+        $sql = "
+            SELECT 
+                consulta.codigo AS codigo_consulta,
+                consulta.fecha AS fecha_consulta,
+                consulta.hora AS hora_consulta,
+                paciente.codigo AS codigo_paciente,
+                paciente.nombre_paciente AS nombre_paciente,
+                paciente.nombre_propietario AS nombre_propietario,
+                paciente.correo AS correo_paciente,
+                paciente.telefono AS telefono_paciente,
+                medico.codigo AS codigo_medico,
+                CONCAT(medico.nombre, ' ', medico.apellidos) AS nombre_completo_medico,
+                medico.telefono AS telefono_medico
+            FROM 
+                consulta
+            JOIN 
+                paciente ON consulta.paciente = paciente.codigo
+            JOIN 
+                medico ON consulta.medico = medico.codigo
+            ORDER BY 
+                consulta.fecha ASC;
+
+            ";
+        $result = $this->conn->query($sql);
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
+    // Obtener todas las consultas de un paciente, incluyendo información del expediente
+    public function obtenerConsultasPorPaciente($codigoPaciente) {
+        $sql = "
+            SELECT 
+                c.codigo AS consulta_codigo, 
+                c.fecha, 
+                c.hora, 
+                c.medico, 
+                c.expediente AS expediente_id,
+                e.diagnostico,
+                e.numero_expediente
+            FROM consulta c
+            INNER JOIN paciente p ON c.paciente = p.codigo
+            LEFT JOIN expediente e ON c.expediente = e.numero_expediente
+            WHERE p.codigo = ?
+            ORDER BY c.fecha ASC";
+            
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("s", $codigoPaciente);
+        $stmt->execute();
+        return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
     }
 
     // Agregar una nueva consulta
@@ -35,12 +84,12 @@ class Consulta {
     }
 
     // Actualizar una consulta
-    public function actualizarConsulta($codigo, $fecha, $hora, $paciente, $medico, $expediente) {
+    public function actualizarConsulta($codigo, $fecha, $hora, $medico) {
         $sql = "UPDATE Consulta 
-                SET fecha = ?, hora = ?, paciente = ?, medico = ?, expediente = ?
+                SET fecha = ?, hora = ?, medico = ?
                 WHERE codigo = ?";
         $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("ssssis", $fecha, $hora, $paciente, $medico, $expediente, $codigo);
+        $stmt->bind_param("ssss", $fecha, $hora, $medico, $codigo);
         return $stmt->execute();
     }
 

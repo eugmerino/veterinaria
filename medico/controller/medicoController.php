@@ -26,7 +26,7 @@ class MedicoController {
         }
     }
 
-    // Registrar un paciente
+    // Registrar Medico
     public function registrarPaciente() {
         $codigo = $_POST['codigo'];
         $nombre = $_POST['nombre'];
@@ -35,9 +35,9 @@ class MedicoController {
       
         $resultado = $this->medicoModel->agregarMedico($codigo, $nombre, $apellido, $telefono);
         if ($resultado) {
-            echo json_encode(['success' => true, 'message' => 'Paciente registrado exitosamente']);
+            echo json_encode(['success' => true, 'message' => 'Medico registrado exitosamente']);
         } else {
-            echo json_encode(['success' => false, 'message' => 'Error al registrar al paciente']);
+            echo json_encode(['success' => false, 'message' => 'Error al registrar al Medico']);
         }
     }
 

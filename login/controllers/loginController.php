@@ -28,7 +28,6 @@ class LoginController {
             $contrasenia = $usuario["password"];
 
             $encript = new Crypto("miClaveSuperSeguraDe32Caracteres");//lo mismo debe de ir en env.        
-            //Suponiendo que tienes un modelo para obtener al usuario desde la base de datos
             $usuario = $this->usuarioModel->obtenerUsuarioPorCodigo($nombre);
             $contraseniaDb=$encript->decrypt($usuario['contrasenia']); 
             $payload = [

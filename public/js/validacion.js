@@ -21,3 +21,15 @@ const data = {
         }
     })
     .catch(error => console.error('Error en la solicitud:', error));
+
+    // Función para cerrar sesión
+    function logout() {
+        // Eliminar el token del almacenamiento
+        localStorage.removeItem('jwt_token');
+
+        // Redirigir al usuario a la página de inicio de sesión
+        window.location.href = '/veterinaria';
+    }
+
+    // Agregar evento al botón de cerrar sesión
+    document.getElementById('logoutButton').addEventListener('click', logout);

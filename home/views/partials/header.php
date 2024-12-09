@@ -21,6 +21,7 @@
                 <li><a href="<?php echo BASE_URL; ?>/consultas">Consultas</a></li>
                 <li><a href="/expedientes">Expedientes</a></li>
                 <li><a href="/medicos">Medicos</a></li>
+                <li><button id="logoutButton">Cerrar Sesión</button></li>
             </ul>
         </nav>
     </header>

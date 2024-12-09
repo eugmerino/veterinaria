@@ -2,6 +2,7 @@
 require_once __DIR__ . '/../../config/conexion.php';
 require_once __DIR__ . '/../models/usuario.php';
 require_once __DIR__ . '/../validacion.php';
+require_once __DIR__ . '/../utils/encript.php';
 class LoginController {
     private $usuarioModel;
     //private $clave="ññññ41jffjjf";//esto debe de ir en una .env
@@ -26,8 +27,10 @@ class LoginController {
             $nombre = $usuario["username"];
             $contrasenia = $usuario["password"];
 
+            $encript = new Crypto("miClaveSuperSeguraDe32Caracteres");//lo mismo debe de ir en env.        
             //Suponiendo que tienes un modelo para obtener al usuario desde la base de datos
-            $usuario = $this->usuarioModel->obtenerUsuarioPorCodigoYContra($nombre, $contrasenia);
+            $usuario = $this->usuarioModel->obtenerUsuarioPorCodigo($nombre);
+            $contraseniaDb=$encript->decrypt($usuario['contrasenia']); 
             $payload = [
                 "usuario" => $nombre,
                 "codigo" => $nombre,//aqui debe de ir el codigo en teoria xd
@@ -36,13 +39,16 @@ class LoginController {
             ];
             
             if ($usuario) {
-                // Usuario encontrado
-                $jwt = crearToken($payload, $clave);//aqui debe de ir codigo y nombre que es el username                
-                $json = json_encode([
-                    'status' => 'sucess',
-                    'message' => 'Usuario no encontrado',
-                    'jwt' => $jwt
-                ]);
+                if($contrasenia==$contraseniaDb){
+                    // Usuario encontrado
+                    $jwt = crearToken($payload, $clave);//aqui debe de ir codigo y nombre que es el username                
+                    $json = json_encode([
+                        'status' => 'sucess',
+                        'message' => 'Usuario encontrado',
+                        'jwt' => $jwt
+                    ]);
+                }
+                
             } else {
                 // Usuario no encontrado
                 $json = json_encode([

@@ -26,6 +26,7 @@ $routes = [
     '/buscar-paciente' => fn() => $pacienteController->buscarPaciente(),
     '/registrar-paciente' => fn() => $pacienteController->registrarPaciente(),
     '/mostrar-medico' => fn() => $medicoController->mostrarMedico(),
+    '/acercade' => fn() => $homeController->acercade(),
 ]; 
 
 // Ejecutar la ruta correspondiente

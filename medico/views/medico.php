@@ -16,13 +16,13 @@
         </header>
 
         <div class="row">
-            <!-- Form to add a new doctor -->
+        
             <div class="col-md-6">
                 <div class="card">
                     <div class="card-header bg-success text-white">
                         <h4>Agregar Nuevo Médico</h4>
                     </div>
-                    <div class="card-body">
+                    <div class="Modal">
                         <form action="procesar.php" method="POST">
                             <div class="mb-3">
                                 <label for="codigo" class="form-label">Código</label>

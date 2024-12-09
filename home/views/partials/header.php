@@ -21,6 +21,7 @@
                 <li><a href="<?php echo BASE_URL; ?>/consultas">Consultas</a></li>
                 <li><a href="/expedientes">Expedientes</a></li>
                 <li><a href="<?php echo BASE_URL; ?>/mostrar-medico">Medicos</a></li>
+                <li><a href="<?php echo BASE_URL; ?>/acercade">Acarca De</a></li>
             </ul>
         </nav>
     </header>

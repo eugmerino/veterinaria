@@ -12,13 +12,13 @@ class ConsultaController {
     }
 
     public function consultasView() {
-        $medicosList = $this->medico->obtenerMedico();
+        $medicosList = $this->medico->obtenerMedicos();
         $consultasList = $this->consulta->obtenerConsultasPacientesMedicos();
         require_once __DIR__ . '/../views/consultasView.php';
     }
 
     public function consultaView() {
-        $medicosList = $this->medico->obtenerMedico();
+        $medicosList = $this->medico->obtenerMedicos();
         require_once __DIR__ . '/../views/consultaView.php';
     }
 

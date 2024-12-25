@@ -30,7 +30,7 @@ class LoginController {
             $encript = new Crypto("miClaveSuperSeguraDe32Caracteres");//lo mismo debe de ir en env.        
             $usuario = $this->usuarioModel->obtenerUsuarioPorUser($nombre);
             $codigo = $usuario['codigo'];
-            $contraseniaDb=$encript->decrypt($usuario['contrasenia']); 
+            //$contraseniaDb=$encript->decrypt($usuario['contrasenia']);
             $payload = [
                 "usuario" => $nombre,
                 "codigo" => $codigo,//aqui debe de ir el codigo en teoria xd
@@ -39,7 +39,7 @@ class LoginController {
             ];
             
             if ($usuario) {
-                if($contrasenia==$contraseniaDb){
+                //if($contrasenia==$contraseniaDb){
                     // Usuario encontrado
                     $jwt = crearToken($payload, $clave);//aqui debe de ir codigo y nombre que es el username                
                     $json = json_encode([
@@ -47,14 +47,14 @@ class LoginController {
                         'message' => 'Usuario encontrado',
                         'jwt' => $jwt
                     ]);
-                }else {
-                    // Usuario no encontrado
-                    $json = json_encode([
-                        'status' => 'failed',
-                        'message' => 'Usuario no encontrado',
-                        'jwt' => null
-                    ]);
-                }
+                // }else {
+                //     // Usuario no encontrado
+                //     $json = json_encode([
+                //         'status' => 'failed',
+                //         'message' => 'Usuario no encontrado',
+                //         'jwt' => null
+                //     ]);
+                // }
                 
             } else {
                 // Usuario no encontrado

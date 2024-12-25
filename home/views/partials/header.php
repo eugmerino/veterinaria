@@ -24,7 +24,7 @@
                     <li><a href="<?php echo BASE_URL; ?>/usuarios">Usuarios</a></li>
             </ul>
             <ul class="nav-right">
-                    <li><a href="#">Cerrar Sesión</a></li>
+                    <li><a href="#" onclick='cerrarSesion()'>Cerrar Sesión</a></li>
             </ul>
         </nav>
     </header>
